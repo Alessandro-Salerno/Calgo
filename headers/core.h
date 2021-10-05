@@ -1,6 +1,6 @@
-#ifndef MODULE_X
-#define MODULE_X
+#ifndef CORE_H
 
+#define CORE_H
 #include "..\headers\token.h"
 #include "..\headers\node.h"
 #include "..\headers\vector.h"

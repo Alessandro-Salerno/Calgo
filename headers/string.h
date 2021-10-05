@@ -1,3 +1,6 @@
+#ifndef STRING_H
+
+#define STRING_H
 #include <stdbool.h>
 
 
@@ -10,3 +13,5 @@ string strPushChar(string str, char chr);
 strings strSplit(string text, char chr);
 int strCount(string text, char chr);
 bool strCompare(string a, string b);
+
+#endif

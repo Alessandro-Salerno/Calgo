@@ -1,3 +1,6 @@
+#ifndef TOKEN_H
+
+#define TOKEN_H
 #include  "..\headers\string.h"
 #include "..\headers\ttypes.h"
 
@@ -11,3 +14,5 @@ typedef struct
 typedef _Token* token;
 
 token Token();
+
+#endif

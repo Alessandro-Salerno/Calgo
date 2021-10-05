@@ -1,3 +1,6 @@
+#ifndef NODE_H
+
+#define NODE_H
 #include "..\headers\ntypes.h"
 #include "..\headers\string.h"
 
@@ -34,3 +37,4 @@ typedef struct
 } _BlockArray;
 
 typedef _BlockArray* blocks;
+#endif

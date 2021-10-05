@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+
+#define VECTOR_H
 #include <stdlib.h>
 
 
@@ -41,3 +44,5 @@
 
 #define vecPush(type, self, item) \
     _vectorPush_##type(self, item);
+
+#endif
