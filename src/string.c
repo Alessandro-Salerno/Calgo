@@ -1,12 +1,28 @@
-#include <malloc.h>
-#include <string.h>
+/***********************************************************************
+                            Calgo Flowchart builder
+                        Copyright 2021 Alessandro Salerno
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***********************************************************************/
+
+
 #include "..\headers\string.h"
+#include <stdlib.h>
+#include <string.h>
 
 
-string Str(string text)
+string _Str(string str, string text)
 {
-    string str = calloc(1024, 1);
-
     for (int i = 0; i < strlen(text); i++)
         str[i] = text[i];
 
@@ -14,15 +30,25 @@ string Str(string text)
 }
 
 
+string Strs(string text, size_t size)
+{
+    string str = calloc(strlen(text) + size, 1);
+    return _Str(str, text);
+}
+
+
+string Str(string text)
+{
+    return Strs(text, 1024);
+}
+
+
 string strJoin(string str1, string str2)
 {
-    string str = calloc(strlen(str1) + strlen(str2), 1);
-    int i, j;
+    string str = Strs(str1, strlen(str1) + strlen(str2));
+    int i = strlen(str1) - 1, j = 0;
 
-    for (i = 0; i < strlen(str1); i++)
-        str[i] = str1[i];
-
-    for (j = 0; j < strlen(str2); j++)
+    for (; j < strlen(str2); j++)
     {
         str[i] = str2[j];
         i++;
@@ -32,44 +58,31 @@ string strJoin(string str1, string str2)
 }
 
 
-string strPushChar(string str, char chr)
+void strPushChar(string str, char chr)
 {
-    string new_str = Str(str);
-    new_str[strlen(new_str)] = chr;
-
-    return new_str;
+    str[strlen(str)] = chr;
 }
 
-strings strSplit(string text, char chr)
+vector(string) strSplit(string text, char chr)
 {
-    text = strJoin(text, &chr);
-
-    int     initial  = strlen(text);
-    int     capacity = initial;
-
-    strings list     = calloc(capacity, 1);
-    string  buffer   = calloc(capacity, 1);
-
-    int     length   = 0;
-    int     index    = 0;
+    strPushChar(text, chr);
+    
+    string buffer       = Str("");
+    vector(string) list = Vec(string, strCount(text, chr) * 2);
 
     for (int i = 0; i < strlen(text); i++)
     {
         if (text[i] == chr)
         {
-            list[length] = buffer;
-            buffer       = calloc(capacity, 1);
-            index        = 0;
-            length++;
+            vecPush(string, list, buffer);
+            buffer = Str("");
 
             continue;
         }
 
-        buffer[index] = text[i];
-        index++;
+        strPushChar(buffer, text[i]);
     }
 
-    free(buffer);
     return list;
 }
 
@@ -96,4 +109,11 @@ bool strCompare(string a, string b)
             return false;
 
     return true;
+}
+
+
+string strClear(string str)
+{
+    free(str);
+    return Str("");
 }

@@ -1,3 +1,21 @@
+/***********************************************************************
+                            Calgo Flowchart builder
+                        Copyright 2021 Alessandro Salerno
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***********************************************************************/
+
+
 #include "..\headers\core.h"
 #include <string.h>
 #include <ctype.h>
@@ -5,70 +23,56 @@
 #include <stdlib.h>
 
 
+void lexerThrowFatalError(string err, int ecode)
+{
+    printf("Error: %s \n", err);
+}
+
+
 vector(token) lexerSegmentCode(string code)
 {
-    string buffer        = Str("");
-    token  tok           = Token();
-    vector(token) list   = Vec(token, 50000);
+    string        keywords[] = {
+                        "MAIN",
+                        "OUTPUT",
+                        "INPUT",
+                        "DECLARE",
+                        "SET",
+                        "IF",
+                        "ELSE",
+                        "END",
+                        "FOR",
+                        "WHILE"
+                    };
+
+    string        buffer     = Str("");
+    int           len        = strlen(code);
+    vector(token) list       = Vec(token, 50000);
     
-    for (int i = 0; i < strlen(code); i++)
+    for (int i = 0; i < len; i++)
     {
         if (code[i] != ' ' & code[i] != ';' & code[i] != '\n' & code[i] != '\t' & code[i] != '\r')
-            buffer = strPushChar(buffer, code[i]);
+            strPushChar(buffer, code[i]);
         
         else if (code[i] == ' ' & !strCompare(buffer, "") | code[i] == ';')
         {
-            if (strCompare(buffer, "OUTPUT"))
-                tok->type = CALGO_OUTPUT_TOKEN;
+            token_t toktype;
+            for (toktype = 0; !strCompare(buffer, keywords[toktype]) & toktype <= CALGO_STOP_TOKEN - CALGO_START_TOKEN; toktype++)
+                continue;
 
-            else if (strCompare(buffer, "INPUT"))
-                tok->type = CALGO_INPUT_TOKEN;
+            if (toktype >= CALGO_STOP_TOKEN)
+                lexerThrowFatalError("Invalid keyword found.", -3);
 
-            else if (strCompare(buffer, "DECLARE"))
-                tok->type = CALGO_DECLARE_TOKEN;
+            buffer = strClear(buffer);
 
-            else if (strCompare(buffer, "SET"))
-                tok->type = CALGO_SET_TOKEN;
-
-            else if (strCompare(buffer, "IF"))
-                tok->type = CALGO_IF_TOKEN;
-
-            else if (strCompare(buffer, "ELSE"))
-                tok->type = CALGO_ELSE_TOKEN;
-
-            else if (strCompare(buffer, "END"))
-                tok->type = CALGO_END_TOKEN;
-
-            else if (strCompare(buffer, "FOR"))
-                tok->type = CALGO_FOR_TOKEN;
-
-            else if (strCompare(buffer, "WHILE"))
-                tok->type = CALGO_WHILE_TOKEN;
-            
-            else
-            {
-                printf("Error: Invalid keyword %s", buffer);
-                exit(-1);
-            }
-
-            free(buffer);
-            buffer = Str("");
-
-            while (code[i] != ';')
-            {
-                buffer = strPushChar(buffer, code[i]);
-                i++;
-            }
-
-            tok->argument = Str(buffer);
+            for (; code[i] != ';'; i++)
+                strPushChar(buffer, code[i]);
 
             token new_token = Token();
-            new_token->argument = tok->argument;
-            new_token->type = tok->type;
+            new_token->argument = Str(buffer);
+            new_token->type = CALGO_START_TOKEN + toktype;
+            
             vecPush(token, list, new_token);
-
-            free(buffer);
-            buffer = Str("");
+            buffer = strClear(buffer);
         }
     }
 
@@ -76,6 +80,6 @@ vector(token) lexerSegmentCode(string code)
 }
 
 
-blocks parserParseTokens(vector(token) toks)
+vector(block) parserParseTokens(vector(token) toks)
 {
 }

@@ -18,9 +18,8 @@ int main(int argc, char* argv[])
         return -2;
     }
 
-    long fsize;
     fseek(file, 0, SEEK_END);
-    fsize = ftell(file);
+    long fsize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
     string code = Str("");
@@ -31,5 +30,6 @@ int main(int argc, char* argv[])
 
     for (int i = 0; i < toks->len; i++)
         printf("Type: %x \t Argument: %s \n", toks->buffer[i]->type, toks->buffer[i]->argument);
+    
     return 0;
 }

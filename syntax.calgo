@@ -1,0 +1,23 @@
+MAIN;
+    DECLARE int x;
+    DECLARE int y;
+    DECLARE int i;
+
+    OUTPUT "Inserire numero iniziale: ";
+    INPUT x;
+
+    IF (x <= 0);
+        OUTPUT "Numero invalido";
+    ELSE;
+        OUTPUT "Inserire numero finale: ";
+        INPUT y;
+
+        IF (y <= 0);
+            OUTPUT "Numero invalido";
+        ELSE;
+            FOR (SET i x, IF (i < y), SET i (i + 1));
+                OUTPUT i;
+            END FOR;
+        END IF;
+    END IF;
+END MAIN;
