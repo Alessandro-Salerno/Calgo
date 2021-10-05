@@ -1,5 +1,11 @@
+#ifndef MODULE_X
+#define MODULE_X
+
 #include "..\headers\token.h"
 #include "..\headers\node.h"
-#include "..\headers\stack.h"
+#include "..\headers\vector.h"
 
-tokens lexerSegmentCode(string code);
+
+_vectorDefineType(token)
+vector(token) lexerSegmentCode(string code);
+#endif

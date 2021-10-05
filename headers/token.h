@@ -10,13 +10,4 @@ typedef struct
 
 typedef _Token* token;
 
-typedef struct 
-{
-    token* buffer;
-    int length;
-} _TokenArray;
-
-typedef _TokenArray* tokens;
-
 token Token();
-tokens TokenArray(int capacity);

@@ -27,10 +27,9 @@ int main(int argc, char* argv[])
     fread(code, 1, fsize, file);
     fclose(file);
 
-    tokens toks = lexerSegmentCode(code);
+    vector(token) toks = lexerSegmentCode(code);
 
-    for (int i = 0; i < toks->length; i++)
+    for (int i = 0; i < toks->len; i++)
         printf("Type: %x \t Argument: %s \n", toks->buffer[i]->type, toks->buffer[i]->argument);
-
     return 0;
 }

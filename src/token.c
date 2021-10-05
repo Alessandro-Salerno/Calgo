@@ -10,13 +10,3 @@ token Token()
 
     return new_token;
 }
-
-
-tokens TokenArray(int capacity)
-{
-    tokens new_array = malloc(sizeof(_TokenArray));
-    new_array->buffer = calloc(capacity, sizeof(token));
-    new_array->length = 0;
-
-    return new_array;
-}

@@ -2,10 +2,9 @@ from os import system, name
 
 
 source = [
-    "src\\stack.c",
     "src\\string.c",
     "src\\token.c",
-    "src\\core.c",
+    "src\\core.c"
 ]
 
 string = "gcc main.c"

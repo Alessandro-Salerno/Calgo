@@ -1,17 +1,15 @@
 #include "..\headers\core.h"
-#include <malloc.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 
-tokens lexerSegmentCode(string code)
+vector(token) lexerSegmentCode(string code)
 {
-    string buffer = Str("");
-    token  tok    = Token();
-    tokens list   = TokenArray(1024 * 50);
-    int    count  = 0;
+    string buffer        = Str("");
+    token  tok           = Token();
+    vector(token) list   = Vec(token, 50000);
     
     for (int i = 0; i < strlen(code); i++)
     {
@@ -67,19 +65,17 @@ tokens lexerSegmentCode(string code)
             token new_token = Token();
             new_token->argument = tok->argument;
             new_token->type = tok->type;
-            list->buffer[count] = new_token;
+            vecPush(token, list, new_token);
 
             free(buffer);
             buffer = Str("");
-            count++;
         }
     }
 
-    list->length = count;
     return list;
 }
 
 
-blocks parserParseTokens(tokens toks)
+blocks parserParseTokens(vector(token) toks)
 {
 }
