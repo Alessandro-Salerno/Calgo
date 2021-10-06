@@ -19,7 +19,7 @@ limitations under the License.
 #ifndef CORE_H
 #define CORE_H
 
-    #include "..\headers\node.h"
+    #include "../headers/node.h"
 
 
     void          lexerThrowFatalError(string        err, int ecode);

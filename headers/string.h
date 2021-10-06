@@ -19,7 +19,7 @@ limitations under the License.
 #ifndef STRING_H
 #define STRING_H
 
-    #include "..\headers\vector.h"
+    #include "../headers/vector.h"
     #include <stdbool.h>
 
 

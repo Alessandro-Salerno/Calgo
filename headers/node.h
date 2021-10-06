@@ -19,8 +19,8 @@ limitations under the License.
 #ifndef NODE_H
 #define NODE_H
 
-    #include "..\headers\token.h"
-    #include "..\headers\ntypes.h"
+    #include "../headers/token.h"
+    #include "../headers/ntypes.h"
 
 
     typedef struct

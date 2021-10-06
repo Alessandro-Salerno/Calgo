@@ -16,7 +16,7 @@ limitations under the License.
 ***********************************************************************/
 
 
-#include "..\headers\token.h"
+#include "../headers/token.h"
 #include <stdlib.h>
 
 

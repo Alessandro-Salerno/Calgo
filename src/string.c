@@ -16,7 +16,7 @@ limitations under the License.
 ***********************************************************************/
 
 
-#include "..\headers\string.h"
+#include "../headers/string.h"
 #include <stdlib.h>
 #include <string.h>
 

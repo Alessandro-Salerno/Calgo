@@ -16,7 +16,7 @@ limitations under the License.
 ***********************************************************************/
 
 
-#include "..\headers\node.h"
+#include "../headers/node.h"
 #include <stdlib.h>
 
 

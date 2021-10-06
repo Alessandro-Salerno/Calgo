@@ -19,8 +19,8 @@ limitations under the License.
 #ifndef TOKEN_H
 #define TOKEN_H
 
-    #include  "..\headers\string.h"
-    #include "..\headers\ttypes.h"
+    #include  "../headers/string.h"
+    #include "../headers/ttypes.h"
 
 
     typedef struct

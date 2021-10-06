@@ -16,7 +16,7 @@ limitations under the License.
 ***********************************************************************/
 
 
-#include "..\headers\core.h"
+#include "../headers/core.h"
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
