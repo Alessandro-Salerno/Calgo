@@ -120,12 +120,22 @@ vector(node) parserParseTokens(vector(token) toks)
                     strPushChar(buffer, '"');
                     break;
 
+                case ',':
+                    if (!strCompare(buffer, "") & !strCompare(buffer, " "))
+                        vecPush(string, new_node->arguments, Str(buffer));
+
+                    buffer = strClear(buffer);
+                    vecPush(string, new_node->arguments, Str("COMMA"));
+                    break;
+
                 case '(':
                     vecPush(string, new_node->arguments, Str("EXP"));
                     break;
 
                 case ')':
-                    vecPush(string, new_node->arguments, Str(buffer));
+                    if (!strCompare(buffer, "") & !strCompare(buffer, " "))
+                        vecPush(string, new_node->arguments, Str(buffer));
+                    
                     buffer = strClear(buffer);
                     vecPush(string, new_node->arguments, Str("/EXP"));
                     break;
