@@ -25,12 +25,14 @@ limitations under the License.
 
     typedef struct
     {
-        node_t         type;
+        token_t        type;
         vector(string) arguments;
     } _Node;
 
     typedef _Node* node;
     _vectorDefineType(node)
+
+    node Node();
 
     typedef struct
     {
@@ -41,5 +43,7 @@ limitations under the License.
 
     typedef _Block* block;
     _vectorDefineType(block)
+
+    block Block();
 
 #endif

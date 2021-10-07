@@ -46,10 +46,23 @@ int main(int argc, char* argv[])
     fread(code, 1, fsize, file);
     fclose(file);
 
-    vector(token) toks = lexerSegmentCode(code);
+    vector(token) toks  = lexerSegmentCode(code);
+    vector(node)  nodes = parserParseTokens(toks); 
 
     for (int i = 0; i < toks->len; i++)
         printf("Type: %x \t Argument: %s \n", toks->buffer[i]->type, toks->buffer[i]->argument);
     
+    printf("\n");
+
+    for (int i = 0; i < nodes->len; i++)
+    {
+        printf("Type: %x \t Arguments: ", nodes->buffer[i]->type);
+
+        for (int j = 0; j < nodes->buffer[i]->arguments->len; j++)
+            printf("%s / ", nodes->buffer[i]->arguments->buffer[j]);
+
+        printf("\n");
+    }
+
     return 0;
 }

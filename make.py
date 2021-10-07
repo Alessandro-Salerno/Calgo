@@ -6,6 +6,7 @@ slash = '\\' if name == "nt" else '/'
 source = [
     f"src{slash}string.c",
     f"src{slash}token.c",
+    f"src{slash}node.c",
     f"src{slash}core.c"
 ]
 

@@ -41,10 +41,10 @@ limitations under the License.
         \
         static void _vectorPush_##type(_Vector_##type* self, type item) \
         { \
-            if (self->len + 1 >= self->size) \
+            if (self->len >= self->size) \
             { \
-                self-> size *= 2; \
-                self->buffer = realloc(self->buffer, self->size); \
+                self->size *= 2; \
+                self->buffer = realloc(self->buffer, sizeof(type) * self->size); \
             } \
             self->buffer[self->len] = item; \
             self->len++; \

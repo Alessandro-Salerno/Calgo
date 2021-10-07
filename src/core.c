@@ -80,6 +80,70 @@ vector(token) lexerSegmentCode(string code)
 }
 
 
-vector(block) parserParseTokens(vector(token) toks)
+vector(node) parserParseTokens(vector(token) toks)
+{
+    // WARNING: Inefficient, unoptimized spaghetti code!
+    // Can't fix it now
+    
+    string       buffer = Str("");
+    vector(node) list   = Vec(node, toks->len);
+
+    for (int i = 0; i < toks->len; i++)
+    {
+        token tok      = toks->buffer[i];
+
+        node new_node  = Node();
+        new_node->type = tok->type;
+        vecPush(string, new_node->arguments, tok->argument);
+
+        strPushChar(tok->argument, ' ');
+
+        for (int j = 0; j < strlen(tok->argument); j++)
+        {
+            switch (tok->argument[j])
+            {
+                case ' ':
+                    if (strCompare(buffer, ""))
+                        break;
+
+                    vecPush(string, new_node->arguments, Str(buffer));
+                    buffer = strClear(buffer);
+                    break;
+
+                case '"':
+                    strPushChar(buffer, '"');
+
+                    j++;
+                    for (; tok->argument[j] != '"'; j++)
+                        strPushChar(buffer, tok->argument[j]);
+
+                    strPushChar(buffer, '"');
+                    break;
+
+                case '(':
+                    vecPush(string, new_node->arguments, Str("EXP"));
+                    break;
+
+                case ')':
+                    vecPush(string, new_node->arguments, Str(buffer));
+                    buffer = strClear(buffer);
+                    vecPush(string, new_node->arguments, Str("/EXP"));
+                    break;
+
+                default:
+                    strPushChar(buffer, tok->argument[j]);
+                    break;
+            }
+        }
+
+        vecPush(node, list, new_node);
+        buffer = strClear(buffer);
+    }
+
+    return list;
+}
+
+
+vector(block) parserParseNodes(vector(node) nodes)
 {
 }

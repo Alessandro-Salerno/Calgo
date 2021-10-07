@@ -24,6 +24,8 @@ limitations under the License.
 
     void          lexerThrowFatalError(string        err, int ecode);
     vector(token) lexerSegmentCode    (string        code          );
-    vector(block) parserParseToens    (vector(token) toks          );
+    vector(node)  parserParseTokens   (vector(token) toks          );
+    vector(block) parserParseNodes    (vector(node)  nodes         );
+
 
 #endif

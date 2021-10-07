@@ -23,17 +23,19 @@ limitations under the License.
 node Node()
 {
     node new_node = malloc(sizeof(_Node));
-    new_node->arguments = calloc(1024, 1);
     new_node->type = 0x00;
+    new_node->arguments = Vec(string, 16);
+
+    return new_node;
 }
 
 
 block Block()
 {
     block new_block = malloc(sizeof(_Block));
-    new_block->main = NodeArray(1024);
-    new_block->brach1 = NodeArray(1024);
-    new_block->brach1 = NodeArray(1024);
+    new_block->main = Vec(node, 1024);
+    new_block->brach1 = Vec(node, 1024);
+    new_block->brach1 = Vec(node, 1024);
 
     return new_block;
 }
