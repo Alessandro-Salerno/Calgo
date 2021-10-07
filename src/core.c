@@ -45,26 +45,25 @@ vector(token) lexerSegmentCode(string code)
                     };
 
     string        buffer     = Str("");
-    int           len        = strlen(code);
     vector(token) list       = Vec(token, 50000);
     
-    for (int i = 0; i < len; i++)
+    for (int i = 0; !strIsNullChar(code, i); i++)
     {
-        if (code[i] != ' ' & code[i] != ';' & code[i] != '\n' & code[i] != '\t' & code[i] != '\r')
+        if (isalpha(code[i]) | isdigit(code[i]))
             strPushChar(buffer, code[i]);
         
-        else if (code[i] == ' ' & !strCompare(buffer, "") | code[i] == ';')
+        else if (!strCompare(buffer, ""))
         {
-            token_t toktype;
-            for (toktype = 0; !strCompare(buffer, keywords[toktype]) & toktype <= CALGO_STOP_TOKEN - CALGO_START_TOKEN; toktype++)
-                continue;
+            token_t toktype = 0;
+            while (!strCompare(buffer, keywords[toktype]) & toktype <= CALGO_STOP_TOKEN - CALGO_START_TOKEN)
+                toktype++;
 
             if (toktype >= CALGO_STOP_TOKEN)
                 lexerThrowFatalError("Invalid keyword found.", -3);
 
             buffer = strClear(buffer);
 
-            for (; code[i] != ';'; i++)
+            for (; code[i] != ';' & code[i + 1] != '\n'; i++)
                 strPushChar(buffer, code[i]);
 
             token new_token = Token();
@@ -82,8 +81,8 @@ vector(token) lexerSegmentCode(string code)
 
 vector(node) parserParseTokens(vector(token) toks)
 {
-    // WARNING: Inefficient, unoptimized spaghetti code!
-    // Can't fix it now
+    // WARNING: Code has been improved, but is still pretty bad.
+    // Gonna fix it later
     
     string       buffer = Str("");
     vector(node) list   = Vec(node, toks->len);
@@ -98,33 +97,35 @@ vector(node) parserParseTokens(vector(token) toks)
 
         strPushChar(tok->argument, ' ');
 
-        for (int j = 0; j < strlen(tok->argument); j++)
+        for (int j = 0; !strIsNullChar(tok->argument, j); j++)
         {
-            switch (tok->argument[j])
+            #define argchr tok->argument[j]
+
+            if (argchr == ' ' | argchr == ',' | argchr == '(' | argchr == ')')
+            {
+                if (strCompare(buffer, ""))
+                    continue;
+
+                vecPush(string, new_node->arguments, Str(buffer));
+                buffer = strClear(buffer);
+            }
+
+            switch (argchr)
             {
                 case ' ':
-                    if (strCompare(buffer, ""))
-                        break;
-
-                    vecPush(string, new_node->arguments, Str(buffer));
-                    buffer = strClear(buffer);
                     break;
 
                 case '"':
                     strPushChar(buffer, '"');
 
                     j++;
-                    for (; tok->argument[j] != '"'; j++)
-                        strPushChar(buffer, tok->argument[j]);
+                    for (; argchr != '"'; j++)
+                        strPushChar(buffer, argchr);
 
                     strPushChar(buffer, '"');
                     break;
 
                 case ',':
-                    if (!strCompare(buffer, "") & !strCompare(buffer, " "))
-                        vecPush(string, new_node->arguments, Str(buffer));
-
-                    buffer = strClear(buffer);
                     vecPush(string, new_node->arguments, Str("COMMA"));
                     break;
 
@@ -133,10 +134,6 @@ vector(node) parserParseTokens(vector(token) toks)
                     break;
 
                 case ')':
-                    if (!strCompare(buffer, "") & !strCompare(buffer, " "))
-                        vecPush(string, new_node->arguments, Str(buffer));
-                    
-                    buffer = strClear(buffer);
                     vecPush(string, new_node->arguments, Str("/EXP"));
                     break;
 

@@ -24,7 +24,7 @@ node Node()
 {
     node new_node = malloc(sizeof(_Node));
     new_node->type = 0x00;
-    new_node->arguments = Vec(string, 16);
+    new_node->arguments = Vec(string, 24);
 
     return new_node;
 }

@@ -23,7 +23,7 @@ limitations under the License.
 
 string _Str(string str, string text)
 {
-    for (int i = 0; i < strlen(text); i++)
+    for (int i = 0; !strIsNullChar(text, i); i++)
         str[i] = text[i];
 
     return str;
@@ -32,7 +32,7 @@ string _Str(string str, string text)
 
 string Strs(string text, size_t size)
 {
-    string str = calloc(strlen(text) + size, 1);
+    string str = calloc(size, 1);
     return _Str(str, text);
 }
 
@@ -45,10 +45,14 @@ string Str(string text)
 
 string strJoin(string str1, string str2)
 {
-    string str = Strs(str1, strlen(str1) + strlen(str2));
-    int i = strlen(str1) - 1, j = 0;
+    int len1   = strlen(str1),
+        len2   = strlen(str2);
 
-    for (; j < strlen(str2); j++)
+    string str = Strs(str1, len1 + len2);
+    int    i   = len1 - 1,
+           j   = 0;
+
+    for (; j < len2; j++)
     {
         str[i] = str2[j];
         i++;
@@ -70,7 +74,7 @@ vector(string) strSplit(string text, char chr)
     string buffer       = Str("");
     vector(string) list = Vec(string, strCount(text, chr) * 2);
 
-    for (int i = 0; i < strlen(text); i++)
+    for (int i = 0; !strIsNullChar(text, i); i++)
     {
         if (text[i] == chr)
         {
@@ -91,7 +95,7 @@ int strCount(string text, char chr)
 {
     int times = 0;
 
-    for (int i = 0; i < strlen(text); i++)
+    for (int i = 0; !strIsNullChar(text, i); i++)
         if (text[i] == chr)
             times++;
 
@@ -104,7 +108,7 @@ bool strCompare(string a, string b)
     if (strlen(a) != strlen(b))
         return false;
 
-    for (int i = 0; i < strlen(a); i++)
+    for (int i = 0; !strIsNullChar(a, i); i++)
         if (a[i] != b[i])
             return false;
 
@@ -112,8 +116,16 @@ bool strCompare(string a, string b)
 }
 
 
+bool strIsNullChar(string  str, int index)
+{
+    return str[index] == '\0';
+}
+
+
 string strClear(string str)
 {
-    free(str);
-    return Str("");
+    for (int i = 0; !strIsNullChar(str, i); i++)
+        str[i] = '\0';
+
+    return str;
 }

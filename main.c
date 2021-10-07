@@ -18,7 +18,8 @@ limitations under the License.
 
 #include "headers/core.h"
 #include <stdio.h>
-
+#include <time.h>
+// #define DEBUG j
 
 int main(int argc, char* argv[])
 {
@@ -46,8 +47,25 @@ int main(int argc, char* argv[])
     fread(code, 1, fsize, file);
     fclose(file);
 
-    vector(token) toks  = lexerSegmentCode(code);
-    vector(node)  nodes = parserParseTokens(toks); 
+    vector(token) toks;
+    vector(node) nodes;
+
+#ifdef DEBUG
+    clock_t t;
+    t = clock();
+
+    for (int i = 0; i < 1000; i++)
+    {
+        toks  = lexerSegmentCode(code);
+        nodes = parserParseTokens(toks); 
+    }
+
+    t = clock() - t;
+    printf("Time taken: %ld \n", t);
+#else
+    toks  = lexerSegmentCode(code);
+    nodes = parserParseTokens(toks); 
+#endif
 
     for (int i = 0; i < toks->len; i++)
         printf("Type: %x \t Argument: %s \n", toks->buffer[i]->type, toks->buffer[i]->argument);
@@ -59,7 +77,7 @@ int main(int argc, char* argv[])
         printf("Type: %x \t Arguments: ", nodes->buffer[i]->type);
 
         for (int j = 0; j < nodes->buffer[i]->arguments->len; j++)
-            printf("%s / ", nodes->buffer[i]->arguments->buffer[j]);
+            printf("%s | ", nodes->buffer[i]->arguments->buffer[j]);
 
         printf("\n");
     }

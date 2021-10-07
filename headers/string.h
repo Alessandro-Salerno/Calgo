@@ -27,14 +27,15 @@ limitations under the License.
     _vectorDefineType(char)
     _vectorDefineType(string)
 
-    string         _Str        (string str , string text);
-    string         Strs        (string text, size_t size);
-    string         Str         (string text             );
-    string         strJoin     (string str1, string str2);
-    void           strPushChar (string str , char   chr);
-    vector(string) strSplit    (string text, char   chr);
-    int            strCount    (string text, char   chr);
-    bool           strCompare  (string a   , string b  );
-    string         strClear    (string str             );
+    string         _Str          (string str , string text);
+    string         Strs          (string text, size_t size);
+    string         Str           (string text             );
+    string         strJoin       (string str1, string str2);
+    void           strPushChar   (string str , char   chr );
+    vector(string) strSplit      (string text, char   chr );
+    int            strCount      (string text, char   chr );
+    bool           strCompare    (string a   , string b   );
+    bool           strIsNullChar (string str , int index  ); 
+    string         strClear      (string str              );
 
 #endif
