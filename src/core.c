@@ -103,10 +103,9 @@ vector(node) parserParseTokens(vector(token) toks)
 
             if (argchr == ' ' | argchr == ',' | argchr == '(' | argchr == ')')
             {
-                if (strCompare(buffer, ""))
-                    continue;
-
-                vecPush(string, new_node->arguments, Str(buffer));
+                if (!strCompare(buffer, ""))
+                    vecPush(string, new_node->arguments, Str(buffer));
+                
                 buffer = strClear(buffer);
             }
 
