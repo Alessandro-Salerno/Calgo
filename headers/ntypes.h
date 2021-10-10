@@ -16,16 +16,22 @@ limitations under the License.
 ***********************************************************************/
 
 
-#ifndef NTYPES_H
-#define NTYPES_H
+#ifndef TTYPES_H
+#define TTYPES_H
 
     typedef enum
     {
-        CALGO_OUTPUT_NODE  = 0xA00,
-        CALGO_INPUT_NODE   = 0xA01,
-        CALGO_DECLARE_NODE = 0xA02,
-        CALGO_SET_NODE     = 0xA03,
-        CALGO_IF_NODE      = 0xA04,
+        CALGO_START_NODE   = 0x000,
+        CALGO_OUTPUT_NODE  = 0x001,
+        CALGO_INPUT_NODE   = 0x002,
+        CALGO_DECLARE_NODE = 0x003,
+        CALGO_SET_NODE     = 0x004,
+        CALGO_IF_NODE      = 0x005,
+        CALGO_ELSE_NODE    = 0x006,
+        CALGO_END_NODE     = 0x007,
+        CALGO_FOR_NODE     = 0x008,
+        CALGO_WHILE_NODE   = 0x009,
+        CALGO_STOP_NODE    = 0x009 + 1
     } node_t;
 
 #endif

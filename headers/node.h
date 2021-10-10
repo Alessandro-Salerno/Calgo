@@ -19,13 +19,12 @@ limitations under the License.
 #ifndef NODE_H
 #define NODE_H
 
-    #include "../headers/token.h"
+    #include "../headers/string.h"
     #include "../headers/ntypes.h"
-
 
     typedef struct
     {
-        token_t        type;
+        node_t        type;
         vector(string) arguments;
     } _Node;
 
@@ -33,17 +32,5 @@ limitations under the License.
     _vectorDefineType(node)
 
     node Node();
-
-    typedef struct
-    {
-        vector(node) main;
-        vector(node) brach1;
-        vector(node) branch2;
-    } _Block;
-
-    typedef _Block* block;
-    _vectorDefineType(block)
-
-    block Block();
 
 #endif

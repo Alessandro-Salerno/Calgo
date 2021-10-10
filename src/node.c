@@ -28,14 +28,3 @@ node Node()
 
     return new_node;
 }
-
-
-block Block()
-{
-    block new_block = malloc(sizeof(_Block));
-    new_block->main = Vec(node, 1024);
-    new_block->brach1 = Vec(node, 1024);
-    new_block->brach1 = Vec(node, 1024);
-
-    return new_block;
-}

@@ -29,8 +29,11 @@ void lexerThrowFatalError(string err, int ecode)
 }
 
 
-vector(token) lexerSegmentCode(string code)
+vector(node) lexerRun(string code)
 {
+    // NOTE: Code has been improved a lot, but is still not as good as I'd like.
+    // Other improvements coming soon
+
     string        keywords[] = {
                         "MAIN",
                         "OUTPUT",
@@ -45,7 +48,7 @@ vector(token) lexerSegmentCode(string code)
                     };
 
     string        buffer     = Str("");
-    vector(token) list       = Vec(token, 50000);
+    vector(node)  list       = Vec(node, 1024);
     
     for (int i = 0; !strIsNullChar(code, i); i++)
     {
@@ -54,102 +57,85 @@ vector(token) lexerSegmentCode(string code)
         
         else if (!strCompare(buffer, ""))
         {
-            token_t toktype = 0;
-            while (!strCompare(buffer, keywords[toktype]) & toktype <= CALGO_STOP_TOKEN - CALGO_START_TOKEN)
-                toktype++;
-
-            if (toktype >= CALGO_STOP_TOKEN)
-                lexerThrowFatalError("Invalid keyword found.", -3);
+            node_t ntype = 0;
+            while (!strCompare(buffer, keywords[ntype]) & ntype <= sizeof(keywords) / sizeof(string))
+                ntype++;
 
             buffer = strClear(buffer);
 
+            while (code[i] == ' ') i++;
             for (; code[i] != ';' & code[i + 1] != '\n'; i++)
                 strPushChar(buffer, code[i]);
 
-            token new_token = Token();
-            new_token->argument = Str(buffer);
-            new_token->type = CALGO_START_TOKEN + toktype;
+            node new_node = Node();
+            vecPush(string, new_node->arguments, Str(buffer));
+            lexerSplitArguments(new_node);
+            new_node->type = ntype;
             
-            vecPush(token, list, new_token);
+            vecPush(node, list, new_node);
             buffer = strClear(buffer);
         }
     }
 
+    free(buffer);
     return list;
 }
 
 
-vector(node) parserParseTokens(vector(token) toks)
+void lexerSplitArguments(node n)
 {
-    // WARNING: Code has been improved, but is still pretty bad.
-    // Gonna fix it later
-    
-    string       buffer = Str("");
-    vector(node) list   = Vec(node, toks->len);
+    string buffer = Str("");
 
-    for (int i = 0; i < toks->len; i++)
+    for (int i = 0; !strIsNullChar(n->arguments->buffer[0], i); i++)
     {
-        token tok      = toks->buffer[i];
+        #define argchr n->arguments->buffer[0][i]
 
-        node new_node  = Node();
-        new_node->type = tok->type;
-        vecPush(string, new_node->arguments, tok->argument);
-
-        strPushChar(tok->argument, ' ');
-
-        for (int j = 0; !strIsNullChar(tok->argument, j); j++)
+        if (argchr == ' ' | argchr == ',' | argchr == '(' | argchr == ')')
         {
-            #define argchr tok->argument[j]
-
-            if (argchr == ' ' | argchr == ',' | argchr == '(' | argchr == ')')
+            if (!strCompare(buffer, ""))
             {
-                if (!strCompare(buffer, ""))
-                    vecPush(string, new_node->arguments, Str(buffer));
-                
+                vecPush(string, n->arguments, Str(buffer));
                 buffer = strClear(buffer);
-            }
-
-            switch (argchr)
-            {
-                case ' ':
-                    break;
-
-                case '"':
-                    strPushChar(buffer, '"');
-
-                    j++;
-                    for (; argchr != '"'; j++)
-                        strPushChar(buffer, argchr);
-
-                    strPushChar(buffer, '"');
-                    break;
-
-                case ',':
-                    vecPush(string, new_node->arguments, Str("COMMA"));
-                    break;
-
-                case '(':
-                    vecPush(string, new_node->arguments, Str("EXP"));
-                    break;
-
-                case ')':
-                    vecPush(string, new_node->arguments, Str("/EXP"));
-                    break;
-
-                default:
-                    strPushChar(buffer, tok->argument[j]);
-                    break;
             }
         }
 
-        vecPush(node, list, new_node);
-        buffer = strClear(buffer);
+        switch (argchr)
+        {
+            case ' ':
+                break;
+
+            case '"':
+                vecPush(string, n->arguments, "STR");
+
+                i++;
+                for (; argchr != '"'; i++)
+                    strPushChar(buffer, argchr);
+
+                break;
+
+            case ',':
+                vecPush(string, n->arguments, "COMMA");
+                break;
+
+            case '(':
+                vecPush(string, n->arguments, "EXP");
+                break;
+
+            case ')':
+                vecPush(string, n->arguments, "/EXP");
+                break;
+
+            default:
+                strPushChar(buffer, argchr);
+                break;
+        }
     }
 
-    return list;
-}
+    if (!strCompare(buffer, n->arguments->buffer[0]))
+    {
+        vecPush(string, n->arguments, buffer);
+        return;
+    }
 
-
-vector(block) parserParseNodes(vector(node) nodes)
-{
+    free(buffer);
 }

@@ -21,6 +21,7 @@ limitations under the License.
 #include <time.h>
 // #define DEBUG j
 
+
 int main(int argc, char* argv[])
 {
     printf("Calgo Flowchart builder\nCopyright 2021 Alessandro Salerno\nDeveloped at: ITIS A. Avogadro, Torino\n\n");
@@ -47,7 +48,6 @@ int main(int argc, char* argv[])
     fread(code, 1, fsize, file);
     fclose(file);
 
-    vector(token) toks;
     vector(node) nodes;
 
 #ifdef DEBUG
@@ -55,22 +55,13 @@ int main(int argc, char* argv[])
     t = clock();
 
     for (int i = 0; i < 1000; i++)
-    {
-        toks  = lexerSegmentCode(code);
-        nodes = parserParseTokens(toks); 
-    }
+        nodes = lexerRun(code); 
 
     t = clock() - t;
     printf("Time taken: %ld \n", t);
 #else
-    toks  = lexerSegmentCode(code);
-    nodes = parserParseTokens(toks); 
+    nodes = lexerRun(code); 
 #endif
-
-    for (int i = 0; i < toks->len; i++)
-        printf("Type: %x \t Argument: %s \n", toks->buffer[i]->type, toks->buffer[i]->argument);
-    
-    printf("\n");
 
     for (int i = 0; i < nodes->len; i++)
     {
