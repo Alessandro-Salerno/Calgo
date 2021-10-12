@@ -19,25 +19,28 @@ limitations under the License.
 #include "headers/core.h"
 #include <stdio.h>
 #include <time.h>
-// #define DEBUG j
+// You're about to read some of the worst code in your life. Be ware. 
 
 
-int main(int argc, char* argv[])
+void mainShowHelpPage()
 {
-    printf("Calgo Flowchart builder\nCopyright 2021 Alessandro Salerno\nDeveloped at: ITIS A. Avogadro, Torino\n\n");
+    printf("      COMMAND  ARGUMENT  DESCRIPTION: \n");
+    printf("Calgo  parse     file    | Parses the file and outputs the result \n");
+    printf("Calgo  bench     file    | Parses the file 1000 times and prints the time taken \n");
+    // GONNA ADD IT LATER: printf("Calgo  draw      file    | Draws the variable table (for now) \n");
 
-    if (argc != 2)
-    {
-        printf("Error: Invalid number of arguments: expected 1, found %i\n", argc - 1);
-        return -1;
-    }
+    exit(0);
+}
 
-    FILE* file = fopen(argv[1], "r");
+
+string mainLoadFile(string path)
+{
+    FILE* file = fopen(path, "r");
 
     if (file == NULL)
     {
-        printf("Error: Invalid file path '%s': No such file.\n", argv[1]);
-        return -2;
+        printf("Error: Invalid file path '%s': No such file.\n", path);
+        exit(-2);
     }
 
     fseek(file, 0, SEEK_END);
@@ -48,20 +51,13 @@ int main(int argc, char* argv[])
     fread(code, 1, fsize, file);
     fclose(file);
 
-    vector(node) nodes;
+    return code;
+}
 
-#ifdef DEBUG
-    clock_t t;
-    t = clock();
 
-    for (int i = 0; i < 1000; i++)
-        nodes = lexerRun(code); 
-
-    t = clock() - t;
-    printf("Time taken: %ld \n", t);
-#else
-    nodes = lexerRun(code); 
-#endif
+vector(node) mainParse(string code)
+{
+    vector(node) nodes = lexerRun(code);
 
     for (int i = 0; i < nodes->len; i++)
     {
@@ -73,5 +69,51 @@ int main(int argc, char* argv[])
         printf("\n");
     }
 
-    return 0;
+    exit(0);
+    return nodes;
+}
+
+
+vector(node) mainBenchmark(string code)
+{
+    vector(node) nodes;
+    
+    clock_t t;
+    t = clock();
+
+    for (int i = 0; i < 1000; i++)
+        nodes = lexerRun(code); 
+
+    t = clock() - t;
+    printf("Time taken: %f ms \n", (double)(t));
+    
+    exit(0);
+    return nodes;
+}
+
+
+int main(int argc, char* argv[])
+{
+    printf("Calgo Flowchart builder\nCopyright 2021 Alessandro Salerno\nDeveloped at: ITIS A. Avogadro, Torino\n\n");
+
+    if (argc == 1)
+    {
+        printf("Insufficient number of arguments. Use argument 'help'\n");
+        return -1;
+    }
+
+    if (argc == 2)
+        if (strCompare(argv[1], "help"))
+            mainShowHelpPage();
+
+    string code = mainLoadFile(argv[2]);
+    
+    if (argc == 3)
+        if (strCompare(argv[1], "parse"))
+            mainParse(code);
+        else if (strCompare(argv[1], "bench"))
+            mainBenchmark(code);
+
+    printf("Error: Invalid command '%s' \n", argv[1]);
+    return -4;
 }
