@@ -50,11 +50,14 @@ string calgoLoadFile(string path)
     size_t ret  = fread(code, 1, fsize, file);
     fclose(file);
 
+    // Gotta figure out why this doesn't wor on Windows
+#ifndef WIN32
     if (ret < fsize)
     {
         printf("Error: File read operation failed. Read %li of %li. \n", ret, fsize);
         exit(-7);
     }
+#endif
 
     return code;
 }
