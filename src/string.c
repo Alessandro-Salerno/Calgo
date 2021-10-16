@@ -67,6 +67,7 @@ void strPushChar(string str, char chr)
     str[strlen(str)] = chr;
 }
 
+
 vector(string) strSplit(string text, char chr)
 {
     strPushChar(text, chr);

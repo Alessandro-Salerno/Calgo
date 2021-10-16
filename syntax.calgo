@@ -1,23 +1,20 @@
-MAIN;
-    DECLARE int x;
-    DECLARE int y;
-    DECLARE int i;
+Main;
+    Declare float mass;
+    Declare float gravity 9.81;
+    Declare float weight;
 
-    OUTPUT "Inserire numero iniziale: ";
-    INPUT x;
+    While (1 == 1);
+        Output "What's your weight? (kg) ";
+        Input mass;
 
-    IF (x <= 0);
-        OUTPUT "Numero invalido";
-    ELSE;
-        OUTPUT "Inserire numero finale: ";
-        INPUT y;
+        If (mass > 0);
+            Set weight (mass * gravity);
+            Output "Your weight is " weight " Newton(s)";
 
-        IF (y <= 0);
-            OUTPUT "Numero invalido";
-        ELSE;
-            FOR (SET i x, IF (i < y), SET i (i + 1));
-                OUTPUT i;
-            END FOR;
-        END IF;
-    END IF;
-END MAIN;
+            Output "Press enter to run again... ";
+            Input;
+        Else;
+            Output mass " Kg is not valid";
+        End If;
+    End While;
+End Main;

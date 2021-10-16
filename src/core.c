@@ -35,25 +35,29 @@ vector(node) lexerRun(string code)
     // Other improvements coming soon
 
     string        keywords[] = {
-                        "MAIN",
-                        "OUTPUT",
-                        "INPUT",
-                        "DECLARE",
-                        "SET",
-                        "IF",
-                        "ELSE",
-                        "END",
-                        "FOR",
-                        "WHILE"
+                        "Main",
+                        "Output",
+                        "Input",
+                        "Declare",
+                        "Set",
+                        "If",
+                        "Else",
+                        "End",
+                        "For",
+                        "While"
                     };
 
     string        buffer     = Str("");
     vector(node)  list       = Vec(node, 1024);
+    int           previdx    = 0;
     
     for (int i = 0; !strIsNullChar(code, i); i++)
     {
         if (isalpha(code[i]) | isdigit(code[i]))
+        {
             strPushChar(buffer, code[i]);
+            previdx = i;
+        }
         
         else if (!strCompare(buffer, ""))
         {
@@ -68,7 +72,7 @@ vector(node) lexerRun(string code)
                 strPushChar(buffer, code[i]);
 
             node new_node = Node();
-            vecPush(string, new_node->arguments, Str(buffer));
+            vecPush(string, new_node->arguments, Strs(buffer, i - previdx + 3));
             lexerSplitArguments(new_node);
             new_node->type = ntype;
             
@@ -84,7 +88,8 @@ vector(node) lexerRun(string code)
 
 void lexerSplitArguments(node n)
 {
-    string buffer = Str("");
+    string buffer  = Str("");
+    int    previdx = 0;
 
     for (int i = 0; !strIsNullChar(n->arguments->buffer[0], i); i++)
     {
@@ -94,8 +99,9 @@ void lexerSplitArguments(node n)
         {
             if (!strCompare(buffer, ""))
             {
-                vecPush(string, n->arguments, Str(buffer));
+                vecPush(string, n->arguments, Strs(buffer, i - previdx + 3));
                 buffer = strClear(buffer);
+                previdx = i;
             }
         }
 
@@ -131,7 +137,7 @@ void lexerSplitArguments(node n)
         }
     }
 
-    if (!strCompare(buffer, n->arguments->buffer[0]))
+    if (!strCompare(buffer, "") & !strCompare(buffer, n->arguments->buffer[0]))
     {
         vecPush(string, n->arguments, buffer);
         return;

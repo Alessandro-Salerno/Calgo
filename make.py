@@ -1,12 +1,13 @@
 from os import system, name
 
 
-slash = '\\' if name == "nt" else '/'
-
 source = [
-    f"src{slash}string.c",
-    f"src{slash}node.c",
-    f"src{slash}core.c"
+    "src/string.c",
+    "src/node.c",
+    "src/core.c",
+    "src/calgo.c",
+    "src/table.c",
+    "src/render.c"
 ]
 
 string = "gcc main.c"
