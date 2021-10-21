@@ -103,13 +103,13 @@ void calgoDrawTable(vector(node) nodes)
 {
     table tab = Table(3);
 
-    tabPush(tab, "NAME", "TYPE", "VALUE");
+    tabPush(tab, "NAME", "TYPE", "DEFINITION");
 
     for (int i = 0; i < nodes->len; i++)
     {
         string name  = "",
                type  = "",
-               value = Str("(unspecified)");
+               value = Str("(undefined)");
         
         if (nodes->buffer[i]->type == CALGO_DECLARE_NODE)
         {
