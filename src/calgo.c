@@ -110,32 +110,48 @@ void calgoDrawTable(vector(node) nodes)
         string name  = "",
                type  = "",
                value = Str("(undefined)");
+
+        if (nodes->buffer[i]->type != CALGO_DECLARE_NODE)
+            continue;
+
+        type = nodes->buffer[i]->arguments->buffer[1];
+        name = nodes->buffer[i]->arguments->buffer[2];
+
+        if (nodes->buffer[i]->arguments->len == 3)
+            goto tab_push;
+
         
-        if (nodes->buffer[i]->type == CALGO_DECLARE_NODE)
+        if (strCompare(nodes->buffer[i]->arguments->buffer[3], "STR"))
+            sprintf(value, "\"%s\"", nodes->buffer[i]->arguments->buffer[4]);
+
+        else if (strCompare(nodes->buffer[i]->arguments->buffer[3], "EXP"))
         {
-            type = nodes->buffer[i]->arguments->buffer[1];
-            name = nodes->buffer[i]->arguments->buffer[2];
+            value = strClear(value);
 
-            if (nodes->buffer[i]->arguments->len >= 4)
+            for (int j = 3; j < nodes->buffer[i]->arguments->len; j++)
             {
-                if (strCompare(nodes->buffer[i]->arguments->buffer[3], "STR"))
-                    sprintf(value, "\"%s\"", nodes->buffer[i]->arguments->buffer[4]);
+                if (strCompare(nodes->buffer[i]->arguments->buffer[j], "EXP"))
+                    sprintf(value, "%s %s", value, "(");
 
-                else if (strCompare(nodes->buffer[i]->arguments->buffer[3], "EXP"))
+                else if (strCompare(nodes->buffer[i]->arguments->buffer[j], "/EXP"))
+                    sprintf(value, "%s %s", value, ")");
+
+                else if (strCompare(nodes->buffer[i]->arguments->buffer[j], "STR"))
                 {
-                    value = strClear(value);
-
-                    // There is a bug with nested expressions here
-                    for (int j = 4; !strCompare(nodes->buffer[i]->arguments->buffer[j], "/EXP"); j++)
-                        sprintf(value, "%s %s", value, nodes->buffer[i]->arguments->buffer[j]);
+                    j++;
+                    sprintf(value, "%s \"%s\"", value, nodes->buffer[i]->arguments->buffer[j]);
                 }
                 
                 else
-                    value = nodes->buffer[i]->arguments->buffer[3];
+                    sprintf(value, "%s %s", value, nodes->buffer[i]->arguments->buffer[j]);
             }
-
-            tabPush(tab, name, type, value);
         }
+        
+        else
+            value = nodes->buffer[i]->arguments->buffer[3];
+
+        tab_push:
+            tabPush(tab, name, type, value);
     }
 
     tabDraw(tab);
