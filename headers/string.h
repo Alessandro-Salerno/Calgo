@@ -26,6 +26,7 @@ limitations under the License.
     typedef char* string;
     _vectorDefineType(char)
     _vectorDefineType(string)
+    
     string         _Str          (string str , string text);
     string         Strs          (string text, size_t size);
     string         Str           (string text             );

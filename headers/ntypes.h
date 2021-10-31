@@ -16,8 +16,8 @@ limitations under the License.
 ***********************************************************************/
 
 
-#ifndef TTYPES_H
-#define TTYPES_H
+#ifndef NTYPES_H
+#define NTYPES_H
 
     typedef enum
     {

@@ -22,8 +22,8 @@ limitations under the License.
     #include "../headers/node.h"
 
 
-    void          lexerThrowFatalError(string        err, int ecode);
-    vector(node)  lexerRun            (string        code          );
-    void          lexerSplitArguments (node          n             );
+    void          lexerThrowFatalError (string        err, int ecode);
+    vector(node)  lexerRun             (string        code          );
+    void          lexerSplitArguments  (node          n             );
 
 #endif

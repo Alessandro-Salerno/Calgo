@@ -32,7 +32,7 @@ limitations under the License.
     typedef _Table* table;
 
     table Table                   (int   colums                 );
-    void  tabPush                 (table tab,   string, ...);
+    void  tabPush                 (table tab,   string, ...     );
     int   tabFindMaxLengthInColum (table tab,   int    colum    );
     void  tabDrawTopBorder        (table tab                    );
     void  tabDrawTextRow          (table tab,   int    row      );

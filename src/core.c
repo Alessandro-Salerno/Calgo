@@ -31,9 +31,6 @@ void lexerThrowFatalError(string err, int ecode)
 
 vector(node) lexerRun(string code)
 {
-    // NOTE: Code has been improved a lot, but is still not as good as I'd like.
-    // Other improvements coming soon
-
     string        keywords[] = {
                         "Main",
                         "Output",
@@ -48,7 +45,7 @@ vector(node) lexerRun(string code)
                     };
 
     string        buffer     = Str("");
-    vector(node)  list       = Vec(node, 1024);
+    vector(node)  list       = Vec(node, 512);
     int           previdx    = 0;
     
     for (int i = 0; !strIsNullChar(code, i); i++)
@@ -71,10 +68,10 @@ vector(node) lexerRun(string code)
             for (; code[i] != ';' & code[i + 1] != '\n'; i++)
                 strPushChar(buffer, code[i]);
 
-            node new_node = Node();
-            vecPush(string, new_node->arguments, Strs(buffer, i - previdx + 3));
+            node new_node = (node) { .type = ntype };
+            new_node.arguments = Vec(string, 16);
+            vecPush(string, new_node.arguments, Strs(buffer, i - previdx + 3));
             lexerSplitArguments(new_node);
-            new_node->type = ntype;
             
             vecPush(node, list, new_node);
             buffer = strClear(buffer);
@@ -91,15 +88,15 @@ void lexerSplitArguments(node n)
     string buffer  = Str("");
     int    previdx = 0;
 
-    for (int i = 0; !strIsNullChar(n->arguments->buffer[0], i); i++)
+    for (int i = 0; !strIsNullChar(n.arguments->buffer[0], i); i++)
     {
-        #define argchr n->arguments->buffer[0][i]
+        #define argchr n.arguments->buffer[0][i]
 
         if (argchr == ' ' | argchr == ',' | argchr == '(' | argchr == ')')
         {
             if (!strCompare(buffer, ""))
             {
-                vecPush(string, n->arguments, Strs(buffer, i - previdx + 3));
+                vecPush(string, n.arguments, Strs(buffer, i - previdx + 3));
                 buffer = strClear(buffer);
                 previdx = i;
             }
@@ -111,7 +108,7 @@ void lexerSplitArguments(node n)
                 break;
 
             case '"':
-                vecPush(string, n->arguments, "STR");
+                vecPush(string, n.arguments, "STR");
 
                 i++;
                 for (; argchr != '"'; i++)
@@ -120,15 +117,15 @@ void lexerSplitArguments(node n)
                 break;
 
             case ',':
-                vecPush(string, n->arguments, "COMMA");
+                vecPush(string, n.arguments, "COMMA");
                 break;
 
             case '(':
-                vecPush(string, n->arguments, "EXP");
+                vecPush(string, n.arguments, "EXP");
                 break;
 
             case ')':
-                vecPush(string, n->arguments, "/EXP");
+                vecPush(string, n.arguments, "/EXP");
                 break;
 
             default:
@@ -137,9 +134,9 @@ void lexerSplitArguments(node n)
         }
     }
 
-    if (!strCompare(buffer, "") & !strCompare(buffer, n->arguments->buffer[0]))
+    if (!strCompare(buffer, "") && !strCompare(buffer, n.arguments->buffer[0]))
     {
-        vecPush(string, n->arguments, buffer);
+        vecPush(string, n.arguments, buffer);
         return;
     }
 

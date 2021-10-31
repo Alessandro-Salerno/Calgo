@@ -69,10 +69,10 @@ vector(node) calgoParse(string code)
 
     for (int i = 0; i < nodes->len; i++)
     {
-        printf("Type: 0x0%x \t Arguments: ", nodes->buffer[i]->type);
+        printf("Type: 0x0%x \t Arguments: ", nodes->buffer[i].type);
 
-        for (int j = 0; j < nodes->buffer[i]->arguments->len; j++)
-            printf("%s | ", nodes->buffer[i]->arguments->buffer[j]);
+        for (int j = 0; j < nodes->buffer[i].arguments->len; j++)
+            printf("%s | ", nodes->buffer[i].arguments->buffer[j]);
 
         printf("\n");
     }
@@ -111,44 +111,44 @@ void calgoDrawTable(vector(node) nodes)
                type  = "",
                value = Str("(undefined)");
 
-        if (nodes->buffer[i]->type != CALGO_DECLARE_NODE)
+        if (nodes->buffer[i].type != CALGO_DECLARE_NODE)
             continue;
 
-        type = nodes->buffer[i]->arguments->buffer[1];
-        name = nodes->buffer[i]->arguments->buffer[2];
+        type = nodes->buffer[i].arguments->buffer[1];
+        name = nodes->buffer[i].arguments->buffer[2];
 
-        if (nodes->buffer[i]->arguments->len == 3)
+        if (nodes->buffer[i].arguments->len == 3)
             goto tab_push;
 
         
-        if (strCompare(nodes->buffer[i]->arguments->buffer[3], "STR"))
-            sprintf(value, "\"%s\"", nodes->buffer[i]->arguments->buffer[4]);
+        if (strCompare(nodes->buffer[i].arguments->buffer[3], "STR"))
+            sprintf(value, "\"%s\"", nodes->buffer[i].arguments->buffer[4]);
 
-        else if (strCompare(nodes->buffer[i]->arguments->buffer[3], "EXP"))
+        else if (strCompare(nodes->buffer[i].arguments->buffer[3], "EXP"))
         {
             value = strClear(value);
 
-            for (int j = 3; j < nodes->buffer[i]->arguments->len; j++)
+            for (int j = 3; j < nodes->buffer[i].arguments->len; j++)
             {
-                if (strCompare(nodes->buffer[i]->arguments->buffer[j], "EXP"))
+                if (strCompare(nodes->buffer[i].arguments->buffer[j], "EXP"))
                     sprintf(value, "%s %s", value, "(");
 
-                else if (strCompare(nodes->buffer[i]->arguments->buffer[j], "/EXP"))
+                else if (strCompare(nodes->buffer[i].arguments->buffer[j], "/EXP"))
                     sprintf(value, "%s %s", value, ")");
 
-                else if (strCompare(nodes->buffer[i]->arguments->buffer[j], "STR"))
+                else if (strCompare(nodes->buffer[i].arguments->buffer[j], "STR"))
                 {
                     j++;
-                    sprintf(value, "%s \"%s\"", value, nodes->buffer[i]->arguments->buffer[j]);
+                    sprintf(value, "%s \"%s\"", value, nodes->buffer[i].arguments->buffer[j]);
                 }
                 
                 else
-                    sprintf(value, "%s %s", value, nodes->buffer[i]->arguments->buffer[j]);
+                    sprintf(value, "%s %s", value, nodes->buffer[i].arguments->buffer[j]);
             }
         }
         
         else
-            value = nodes->buffer[i]->arguments->buffer[3];
+            value = nodes->buffer[i].arguments->buffer[3];
 
         tab_push:
             tabPush(tab, name, type, value);

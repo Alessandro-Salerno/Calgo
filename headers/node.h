@@ -22,15 +22,13 @@ limitations under the License.
     #include "../headers/string.h"
     #include "../headers/ntypes.h"
 
+
     typedef struct
     {
         node_t        type;
         vector(string) arguments;
-    } _Node;
+    } node;
 
-    typedef _Node* node;
     _vectorDefineType(node)
-
-    node Node();
 
 #endif

@@ -3,7 +3,6 @@ from os import system, name
 
 source = [
     "src/string.c",
-    "src/node.c",
     "src/core.c",
     "src/calgo.c",
     "src/table.c",

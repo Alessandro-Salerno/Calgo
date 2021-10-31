@@ -22,7 +22,6 @@ limitations under the License.
 // You're about to read some of the worst code in your life. Be ware. 
 
 
-
 int main(int argc, char* argv[])
 {
     string code;
