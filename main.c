@@ -25,7 +25,7 @@ limitations under the License.
 int main(int argc, char* argv[])
 {
     string code;
-    printf("Calgo Flowchart builder\nCopyright 2021 Alessandro Salerno\nDeveloped at: ITIS A. Avogadro, Torino\n\n");
+    printf("Calgo Flowchart builder\nCopyright 2021 - Alessandro Salerno\nDeveloped at: ITIS A. Avogadro, Torino\n\n");
 
     if (argc == 1)
     {
